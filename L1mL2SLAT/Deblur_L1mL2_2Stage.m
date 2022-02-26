@@ -1,5 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%This function performs AITV two-stage segmentation for grayscale images.
+%This function performs AITV two-stage segmentation for blurry, grayscale 
+%images.
 %Input:
 %   f: image
 %   A: blurring operator
@@ -19,7 +20,7 @@ function result = Deblur_L1mL2_2Stage(f, A, lambda, mu, alpha, delta, k)
     %obtain size of f
     [m,n] = size(f);
     
-    %%Two-Stage Segmentation
+    %% Two-Stage Segmentation
     %stage one: smooth the image
     u = Deblur_L1mL2smooth(f, A, lambda, mu, alpha, delta);
     
@@ -28,7 +29,7 @@ function result = Deblur_L1mL2_2Stage(f, A, lambda, mu, alpha, delta, k)
     idx = kmeans(u_vector, k, 'Replicates',5);
     idx = reshape(idx, m,n);
     
-    %%postprocessing step
+    %% postprocessing step
     %compute mean of each part and construct the piecewise constant image
     mean_c = zeros(k,1);
     result = zeros(m,n);

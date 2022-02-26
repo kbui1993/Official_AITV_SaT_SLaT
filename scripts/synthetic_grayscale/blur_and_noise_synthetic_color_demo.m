@@ -1,11 +1,14 @@
-%% read image
+%read image
 fui8 = imread('shape.png');
 fui8 = rgb2gray(fui8);
 
 f = double(fui8);
 [N,M] = size(f);
 
-%%specify a blurring operator and blur the image
+result = zeros(5, 11);
+result(:,1) = [0.1; 0.2; 0.3; 0.4; 0.5];
+
+%specify a blurring operator and blur the image
 g = fspecial('motion', 5, 45);
 
 %create color version
@@ -14,13 +17,15 @@ f_color(:,:,1) = double(f>0)*0.5;
 f_color(:,:,2) = double(f>0)*0.9;
 f_color(:,:,3) = double(f>0)*0.25;
 
-%add noise to each channel; 0 for salt & pepper and 1 for random-valued
-rng(1234);
-fnoise = impulsenoise(f_color, 0.25, 1);
+f_color(:,:,1) = myconv(f_color(:,:,1), g);
+f_color(:,:,2) = myconv(f_color(:,:,2), g);
+f_color(:,:,3) = myconv(f_color(:,:,3), g);
 
-fnoise(:,:,1) = myconv(fnoise(:,:,1), g);
-fnoise(:,:,2) = myconv(fnoise(:,:,2), g);
-fnoise(:,:,3) = myconv(fnoise(:,:,3), g);
+%set seed
+rng(1234);
+
+%add noise to each channel; 0 for salt & pepper and 1 for random-valued
+fnoise = impulsenoise(f_color, 0.45, 0);
     
 %L1-alpha L2 SLaT method alpha = 0.8
 [SLaT_0pt8_result, SLaT_0pt8_result_idx] = Deblur_L1mL2_SLaT(fnoise, g, 2.5, 1, 0.8, 2);

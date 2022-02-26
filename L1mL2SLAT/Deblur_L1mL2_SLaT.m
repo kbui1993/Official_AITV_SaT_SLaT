@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%This function performs AITV SLaT on a color image.
+%This function performs AITV SLaT on a blurry, color image.
 %Input:
 %   f: color image
 %   A: blurring operator
@@ -16,26 +16,27 @@ function [result, idx] = Deblur_L1mL2_SLaT(f, A, lambda, mu, alpha, k)
     
     %preinitialize
     uu = zeros(size(f));
+
     %get channel size
     zLen = size(uu,3);
     
-    %Stage 1: smooth each channel
+    %% Stage 1: smooth each channel
     parfor i = 1:zLen
         uu(:,:,i) = Deblur_L1mL2smooth(f(:,:,i), A, lambda, mu, alpha, 2);
     end
     
-    %Stage 2: Lifting
+    %% Stage 2: Lifting
     cform = makecform('srgb2lab');
     g = double(applycform(uint8(uu*255),cform))/255;
     uu(:,:,4:6) = rescale_color_image(g);
     
-    %Stage 3: Thresholding via kmeans
+    %% Stage 3: Thresholding via kmeans
     [m,n,~] = size(uu);
     u_vector = reshape(uu, m*n, 6);
     idx = kmeans(u_vector, k, 'Replicates', 50, 'Options',statset('UseParallel',1));
     idx = reshape(idx, m,n);
     
-    %postprocessing step
+    %% postprocessing step
     %compute mean of each part and construct piecewise constant image
     mean_c = zeros(k,3);
     result = zeros(m,n,3);

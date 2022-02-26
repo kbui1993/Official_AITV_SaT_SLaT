@@ -8,9 +8,7 @@ circle_noise = imnoise(circle, 'gaussian', 0, 0.025);
 circle_noise = rescale_color_image(circle_noise);
 
 %L1mL2 SLAT alpha = 0.8
-tic;
 L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(circle_noise), 3.5, 1.0, 0.8, 3);
-toc
 L1mL2_0pt8_SLAT_psnr = psnr(L1mL2_0pt8_SLAT_result, circle);
 
 %L1mL2 SLAT alpha = 0.6

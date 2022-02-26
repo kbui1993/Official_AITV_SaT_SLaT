@@ -1,4 +1,4 @@
-%% read image
+%read image
 fui8 = imread('shape.png');
 fui8 = rgb2gray(fui8);
 f = double(fui8);
@@ -6,7 +6,7 @@ f = double(fui8);
 
 %add noise; 0 for salt & pepper; 1 for random-valued
 rng(1234)
-fnoise = impulsenoise(f, 0.5, 0);
+fnoise = impulsenoise(f, 0.65, 1);
 
 %rescale image
 fnoise = double(fnoise);

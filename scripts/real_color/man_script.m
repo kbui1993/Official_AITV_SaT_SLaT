@@ -8,9 +8,7 @@ man_noise = imnoise(man, 'gaussian', 0, 0.025);
 man_noise = rescale_color_image(man_noise);
 
 %L1mL2 SLAT alpha = 0.8
-tic;
 L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(man_noise), 3.5, 1.0, 0.8, 5);
-toc
 L1mL2_0pt8_SLAT_psnr = psnr(L1mL2_0pt8_SLAT_result, man);
 
 %L1mL2 SLAT alpha = 0.6

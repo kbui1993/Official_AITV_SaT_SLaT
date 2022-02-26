@@ -8,9 +8,7 @@ house_noise = imnoise(house, 'gaussian', 0, 0.025);
 house_noise = rescale_color_image(house_noise);
 
 %L1mL2 SLAT alpha = 0.8
-tic;
 L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(house_noise), 3.5, 1.0, 0.8, 6);
-toc
 L1mL2_0pt8_SLAT_psnr = psnr(L1mL2_0pt8_SLAT_result, house);
 
 %L1mL2 SLAT alpha = 0.6

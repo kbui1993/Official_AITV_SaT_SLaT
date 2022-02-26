@@ -1,4 +1,4 @@
-%% read image
+%read image
 fui8 = imread('shape.png');
 fui8 = rgb2gray(fui8);
 
@@ -11,10 +11,11 @@ f_color(:,:,1) = double(f>0)*0.5;
 f_color(:,:,2) = double(f>0)*0.9;
 f_color(:,:,3) = double(f>0)*0.25;
 
+%set seed
 rng(1234);
 
 %add noise to each channel; 0 for salt & pepper and 1 for random-valued
-fnoise = impulsenoise(f_color, 0.5, 1);
+fnoise = impulsenoise(f_color, 0.6, 1);
 
 
 %L1-alpha L2 SLaT method alpha = 0.8

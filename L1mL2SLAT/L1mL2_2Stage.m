@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%This function performs L1mL2 two-stage segmentation for grayscale images.
+%This function performs AITV two-stage segmentation for grayscale images.
 %Input:
 %   f: image
 %   lambda: weighing parameter for fidelity term
@@ -18,7 +18,7 @@ function result = L1mL2_2Stage(f, lambda, mu, alpha, delta, k)
     %obtain size of f
     [m,n] = size(f);
     
-    %%Two-Stage Segmentation
+    %% Two-Stage Segmentation
     %stage one: smooth the image
     u = L1mL2smooth(f, lambda, mu, alpha, delta);
     
@@ -27,7 +27,7 @@ function result = L1mL2_2Stage(f, lambda, mu, alpha, delta, k)
     idx = kmeans(u_vector, k, 'Replicates',5);
     idx = reshape(idx, m,n);
     
-    %%postprocessing step
+    %% postprocessing step
     %compute mean of each part and construct the piecewise constant image
     mean_c = zeros(k,1);
     result = zeros(m,n);
