@@ -1,3 +1,6 @@
+% set type of noise
+noise_setting = 0; %  0 for salt & pepper; 1 for random-valued
+
 %read image
 fui8 = imread('shape.png');
 fui8 = rgb2gray(fui8);
@@ -25,22 +28,29 @@ f_color(:,:,3) = myconv(f_color(:,:,3), g);
 rng(1234);
 
 %add noise to each channel; 0 for salt & pepper and 1 for random-valued
-fnoise = impulsenoise(f_color, 0.45, 0);
+fnoise = impulsenoise(f_color, 0.45, noise_setting);
+
+% set parameters
+if noise_setting == 0
+    lambda = 2.4; mu = 2.4; %SP
+else
+    lambda = 6.6; mu = 1.6; %RV
+end
     
 %L1-alpha L2 SLaT method alpha = 0.8
-[SLaT_0pt8_result, SLaT_0pt8_result_idx] = Deblur_L1mL2_SLaT(fnoise, g, 2.5, 1, 0.8, 2);
+[SLaT_0pt8_result, SLaT_0pt8_result_idx] = Deblur_L1mL2_SLaT(fnoise, g, lambda, mu, 0.8, 2);
 SLaT_0pt8_DICE = max(dice(double(SLaT_0pt8_result_idx>1), f/255), dice(double(SLaT_0pt8_result_idx<2), f/255));
 
 %L1-alpha L2 SLaT method alpha = 0.6
-[SLaT_0pt6_result,SLaT_0pt6_result_idx]  = Deblur_L1mL2_SLaT(fnoise, g, 2.5, 1, 0.6, 2);
+[SLaT_0pt6_result,SLaT_0pt6_result_idx]  = Deblur_L1mL2_SLaT(fnoise, g, lambda, mu, 0.6, 2);
 SLaT_0pt6_DICE = max(dice(double(SLaT_0pt6_result_idx>1), f/255), dice(double(SLaT_0pt6_result_idx<2), f/255));
 
 %L1-alpha L2 SLaT method alpha = 0.4
-[SLaT_0pt4_result, SLaT_0pt4_result_idx] = Deblur_L1mL2_SLaT(fnoise, g, 2.5, 1, 0.4, 2);
+[SLaT_0pt4_result, SLaT_0pt4_result_idx] = Deblur_L1mL2_SLaT(fnoise, g, lambda, mu, 0.4, 2);
 SLaT_0pt4_DICE = max(dice(double(SLaT_0pt4_result_idx>1), f/255), dice(double(SLaT_0pt4_result_idx<2), f/255));
 
 %L1-alpha L2 SLaT method alpha = 0.2
-[SLaT_0pt2_result, SLaT_0pt2_result_idx] = Deblur_L1mL2_SLaT(fnoise, g, 2.5, 1, 0.2, 2);
+[SLaT_0pt2_result, SLaT_0pt2_result_idx] = Deblur_L1mL2_SLaT(fnoise, g, lambda, mu, 0.2, 2);
 SLaT_0pt2_DICE = max(dice(double(SLaT_0pt2_result_idx>1), f/255), dice(double(SLaT_0pt2_result_idx<2), f/255));
 
 %plot figure

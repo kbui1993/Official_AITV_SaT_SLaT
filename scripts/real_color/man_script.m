@@ -1,26 +1,34 @@
+%noise setting
+noise_setting =0; %0 for salt-pepper noise, otherwise gaussian noise
+
 %read image
 man = imread('man.jpg');
 
 man = rescale_color_image(double(man));
+rng(1234);
+if noise_setting == 0
+    man_noise = impulsenoise(man, .1, noise_setting);
+    lambda = 2; mu = 0.05;
+else
+    man_noise = imnoise(man, 'gaussian', 0, 0.025);
+    lambda = 8; mu = 0.05;
+end
 
-man_noise = imnoise(man, 'gaussian', 0, 0.025);
-
-man_noise = rescale_color_image(man_noise);
 
 %L1mL2 SLAT alpha = 0.8
-L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(man_noise), 3.5, 1.0, 0.8, 5);
+L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(man_noise), lambda, mu, 0.8, 5);
 L1mL2_0pt8_SLAT_psnr = psnr(L1mL2_0pt8_SLAT_result, man);
 
 %L1mL2 SLAT alpha = 0.6
-L1mL2_0pt6_SLAT_result = L1mL2_SLaT(double(man_noise), 3.5, 1.0, 0.6, 5);
+L1mL2_0pt6_SLAT_result = L1mL2_SLaT(double(man_noise), lambda, mu, 0.6, 5);
 L1mL2_0pt6_SLAT_psnr = psnr(L1mL2_0pt6_SLAT_result, man);
 
 %L1mL2 SLAT alpha = 0.4
-L1mL2_0pt4_SLAT_result = L1mL2_SLaT(double(man_noise), 3.5, 1.0, 0.4, 5);
+L1mL2_0pt4_SLAT_result = L1mL2_SLaT(double(man_noise), lambda, mu, 0.4, 5);
 L1mL2_0pt4_SLAT_psnr = psnr(L1mL2_0pt4_SLAT_result, man);
 
 %L1mL2 SLAT alpha = 0.2
-L1mL2_0pt2_SLAT_result = L1mL2_SLaT(double(man_noise), 3.5, 1.0, 0.2, 5);
+L1mL2_0pt2_SLAT_result = L1mL2_SLaT(double(man_noise), lambda, mu, 0.2, 5);
 L1mL2_0pt2_SLAT_psnr = psnr(L1mL2_0pt2_SLAT_result, man);
 
 %plot figure

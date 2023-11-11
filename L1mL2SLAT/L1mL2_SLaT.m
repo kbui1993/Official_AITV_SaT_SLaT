@@ -31,7 +31,7 @@ function [result, idx] = L1mL2_SLaT(f, lambda, mu, alpha, k)
     %Stage 3: Thresholding via kmeans
     [m,n,~] = size(uu);
     u_vector = reshape(uu, m*n, 6);
-    idx = kmeans(u_vector, k, 'Replicates', 10);
+    idx = kmeans(u_vector, k, 'Replicates', 5);
     idx = reshape(idx, m,n);
     
     %postprocessing step

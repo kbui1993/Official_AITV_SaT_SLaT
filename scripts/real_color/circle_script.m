@@ -1,26 +1,34 @@
+%noise setting
+noise_setting =1; %0 for salt-pepper noise, otherwise gaussian noise
+
 %read image
 circle = imread('circle.jpg');
 
 circle = rescale_color_image(double(circle));
 
-circle_noise = imnoise(circle, 'gaussian', 0, 0.025);
-
-circle_noise = rescale_color_image(circle_noise);
+rng(1234);
+if noise_setting == 0
+    circle_noise = impulsenoise(circle, .1, noise_setting);
+    lambda = 10; mu = 1.0;
+else
+    circle_noise = imnoise(circle, 'gaussian', 0, 0.025);
+    lambda = 22; mu = 0.1;
+end
 
 %L1mL2 SLAT alpha = 0.8
-L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(circle_noise), 3.5, 1.0, 0.8, 3);
+L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(circle_noise), lambda, mu, 0.8, 3);
 L1mL2_0pt8_SLAT_psnr = psnr(L1mL2_0pt8_SLAT_result, circle);
 
 %L1mL2 SLAT alpha = 0.6
-L1mL2_0pt6_SLAT_result = L1mL2_SLaT(double(circle_noise), 3.5, 1.0, 0.6, 3);
+L1mL2_0pt6_SLAT_result = L1mL2_SLaT(double(circle_noise), lambda, mu, 0.6, 3);
 L1mL2_0pt6_SLAT_psnr = psnr(L1mL2_0pt6_SLAT_result, circle);
 
 %L1mL2 SLAT alpha = 0.4
-L1mL2_0pt4_SLAT_result = L1mL2_SLaT(double(circle_noise), 3.5, 1.0, 0.4, 3);
+L1mL2_0pt4_SLAT_result = L1mL2_SLaT(double(circle_noise), lambda, mu, 0.4, 3);
 L1mL2_0pt4_SLAT_psnr = psnr(L1mL2_0pt4_SLAT_result, circle);
 
 %L1mL2 SLAT alpha = 0.2
-L1mL2_0pt2_SLAT_result = L1mL2_SLaT(double(circle_noise), 3.5, 1.0, 0.2, 3);
+L1mL2_0pt2_SLAT_result = L1mL2_SLaT(double(circle_noise), lambda, mu, 0.2, 3);
 L1mL2_0pt2_SLAT_psnr = psnr(L1mL2_0pt2_SLAT_result, circle);
 
 %plot figure

@@ -1,26 +1,36 @@
+%noise setting
+noise_setting =1; %0 for salt-pepper noise, otherwise gaussian noise
+
 %read image
 building = imread('building.jpg');
 
 building = rescale_color_image(double(building));
 
-building_noise = imnoise(building, 'gaussian', 0, 0.025);
+rng(1234);
+if noise_setting == 0
+    building_noise = impulsenoise(building, .1, noise_setting);
+    lambda = 2; mu = 0.05;
+else
+    building_noise = imnoise(building, 'gaussian', 0, 0.025);
+    lambda = 10; mu = 0.1;
+end
 
 building_noise = rescale_color_image(building_noise);
 
 %L1mL2 SLAT alpha = 0.8
-L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(building_noise), 3.5, 1.0, 0.8, 6);
+L1mL2_0pt8_SLAT_result = L1mL2_SLaT(double(building_noise), lambda, mu, 0.8, 8);
 L1mL2_0pt8_SLAT_psnr = psnr(L1mL2_0pt8_SLAT_result, building);
 
 %L1mL2 SLAT alpha = 0.6
-L1mL2_0pt6_SLAT_result = L1mL2_SLaT(double(building_noise), 3.5, 1.0, 0.6, 6);
+L1mL2_0pt6_SLAT_result = L1mL2_SLaT(double(building_noise), lambda, mu, 0.6, 8);
 L1mL2_0pt6_SLAT_psnr = psnr(L1mL2_0pt6_SLAT_result, building);
 
 %L1mL2 SLAT alpha = 0.4
-L1mL2_0pt4_SLAT_result = L1mL2_SLaT(double(building_noise), 3.5, 1.0, 0.4, 6);
+L1mL2_0pt4_SLAT_result = L1mL2_SLaT(double(building_noise), lambda, mu, 0.4, 8);
 L1mL2_0pt4_SLAT_psnr = psnr(L1mL2_0pt4_SLAT_result, building);
 
 %L1mL2 SLAT alpha = 0.2
-L1mL2_0pt2_SLAT_result = L1mL2_SLaT(double(building_noise), 3.5, 1.0, 0.2, 6);
+L1mL2_0pt2_SLAT_result = L1mL2_SLaT(double(building_noise), lambda, mu, 0.2, 8);
 L1mL2_0pt2_SLAT_psnr = psnr(L1mL2_0pt2_SLAT_result, building);
 
 %plot figure
